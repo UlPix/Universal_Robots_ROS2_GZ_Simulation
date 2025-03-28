@@ -79,7 +79,8 @@ def launch_setup(context, *args, **kwargs):
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare(description_package), "urdf", description_file]
+                [FindPackageShare(description_package),
+                 "urdf", description_file]
             ),
             " ",
             "safety_limits:=",
@@ -127,7 +128,8 @@ def launch_setup(context, *args, **kwargs):
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=["joint_state_broadcaster",
+                   "--controller-manager", "/controller_manager"],
     )
 
     # Delay rviz start after `joint_state_broadcaster`
@@ -149,7 +151,8 @@ def launch_setup(context, *args, **kwargs):
     initial_joint_controller_spawner_stopped = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=[initial_joint_controller, "-c", "/controller_manager", "--stopped"],
+        arguments=[initial_joint_controller, "-c",
+                   "/controller_manager", "--stopped"],
         condition=UnlessCondition(start_joint_controller),
     )
 
@@ -165,6 +168,18 @@ def launch_setup(context, *args, **kwargs):
             "ur",
             "-allow_renaming",
             "true",
+            "-x",
+            "0.25",
+            "-y",
+            "0",
+            "-z",
+            "1.0",
+            "-R",
+            "0",
+            "-P",
+            "0",
+            "-Y",
+            "0",
         ],
     )
     gz_launch_description_with_gui = IncludeLaunchDescription(
@@ -189,6 +204,8 @@ def launch_setup(context, *args, **kwargs):
         executable="parameter_bridge",
         arguments=[
             "/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock",
+            "/depth_camera@sensor_msgs/msg/Image@gz.msgs.Image",
+            "/rgb_camera@sensor_msgs/msg/Image@gz.msgs.Image",
         ],
         output="screen",
     )
@@ -215,7 +232,8 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "ur_type",
             description="Type/series of used UR robot.",
-            choices=["ur3", "ur3e", "ur5", "ur5e", "ur10", "ur10e", "ur16e", "ur20", "ur30"],
+            choices=["ur3", "ur3e", "ur5", "ur5e",
+                     "ur10", "ur10e", "ur16e", "ur20", "ur30"],
             default_value="ur5e",
         )
     )
@@ -295,7 +313,8 @@ def generate_launch_description():
         )
     )
     declared_arguments.append(
-        DeclareLaunchArgument("launch_rviz", default_value="true", description="Launch RViz?")
+        DeclareLaunchArgument(
+            "launch_rviz", default_value="true", description="Launch RViz?")
     )
     declared_arguments.append(
         DeclareLaunchArgument(
