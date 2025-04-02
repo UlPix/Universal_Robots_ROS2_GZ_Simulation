@@ -25,7 +25,7 @@
     
 
     <light type="directional" name="sun">
-      <cast_shadows>true</cast_shadows>
+      <cast_shadows>false</cast_shadows>
       <pose>0 0 10 0 0 0</pose>
       <diffuse>1 1 1 1</diffuse>
       <specular>0.5 0.5 0.5 1</specular>
@@ -65,14 +65,14 @@
       </link>
     </model>
     
-    <include>
+    <!-- <include>
       <static>true</static>
       <pose>0 0 0 0.0 0.0 1.57</pose>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Table</uri>
-    </include>
+    </include> -->
     
     <model name="camera_model">
-      <pose>0.2 0 2.5 0 1.57 0</pose> <!-- Positioned above the table, looking straight down -->
+      <pose>0.2 0 1.5 0 1.57 0</pose> <!-- Positioned above the table, looking straight down -->
       <link name="link">
         <pose>0.0 0.0 0.0 0 0 0</pose>
         <inertial>
@@ -113,6 +113,11 @@
               <near>0.1</near>
               <far>10.0</far>
             </clip>
+            <noise>
+              <type>gaussian</type>
+              <mean>0.0</mean>
+              <stddev>0.01</stddev>
+            </noise>
           </camera>
         </sensor>
 
@@ -137,36 +142,5 @@
       </link>
       <static>true</static>
     </model>
-
-
-    <!-- RGB Camera
-    <model name="rgb_camera">
-      <static>true</static>
-      <pose>0 0 2 0 -1.57 0</pose>
-      <link name="link">
-        <sensor name="rgb_camera" type="camera">
-          <always_on>true</always_on>
-          <visualize>true</visualize>
-          <update_rate>30</update_rate>
-          <topic>camera/rgb/image_raw</topic>
-          <gz_frame_id>camera_rgb_frame</gz_frame_id>
-          <camera name="intel_realsense_r200">
-            <camera_info_topic>camera/rgb/camera_info</camera_info_topic>
-            <horizontal_fov>1.047</horizontal_fov>
-            <image>
-              <width>640</width>
-              <height>480</height>
-              <format>R8G8B8</format>
-            </image>
-            <clip>
-              <near>0.1</near>
-              <far>5.0</far>
-            </clip>
-          </camera>
-        </sensor>
-      </link>
-    </model>
-    -->
-
   </world>
 </sdf>
