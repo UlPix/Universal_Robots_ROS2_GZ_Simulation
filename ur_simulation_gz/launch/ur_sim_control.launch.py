@@ -63,6 +63,7 @@ def launch_setup(context, *args, **kwargs):
     start_joint_controller = LaunchConfiguration("start_joint_controller")
     initial_joint_controller = LaunchConfiguration("initial_joint_controller")
     launch_rviz = LaunchConfiguration("launch_rviz")
+    rviz_config_file = LaunchConfiguration("rviz_config_file")
     gazebo_gui = LaunchConfiguration("gazebo_gui")
     world_file = LaunchConfiguration("world_file")
 
@@ -70,9 +71,9 @@ def launch_setup(context, *args, **kwargs):
         [FindPackageShare(runtime_config_package), "config", controllers_file]
     )
 
-    rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare(description_package), "rviz", "view_robot.rviz"]
-    )
+    # rviz_config_file = PathJoinSubstitution(
+    #    [FindPackageShare(description_package), "rviz", "view_robot.rviz"]
+    # )
 
     robot_description_content = Command(
         [
@@ -156,7 +157,6 @@ def launch_setup(context, *args, **kwargs):
         condition=UnlessCondition(start_joint_controller),
     )
 
-    # GZ nodes
     gz_spawn_entity = Node(
         package="ros_gz_sim",
         executable="create",
@@ -169,11 +169,11 @@ def launch_setup(context, *args, **kwargs):
             "-allow_renaming",
             "true",
             "-x",
-            "0.25",
+            "0.0",
             "-y",
             "0",
             "-z",
-            "1.0",
+            "0.0",
             "-R",
             "0",
             "-P",
@@ -197,8 +197,7 @@ def launch_setup(context, *args, **kwargs):
         launch_arguments={"gz_args": [" -s -r -v 4 ", world_file]}.items(),
         condition=UnlessCondition(gazebo_gui),
     )
-
-    # Make the /clock topic available in ROS
+    # Bridge between ROS2 and Ignition
     gz_sim_bridge = Node(
         package="ros_gz_bridge",
         executable="parameter_bridge",
@@ -317,6 +316,14 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "launch_rviz", default_value="true", description="Launch RViz?")
     )
+    declared_arguments.append(DeclareLaunchArgument(
+        'rviz_config_file',
+        default_value=PathJoinSubstitution(
+            [FindPackageShare('ur_simulation_gz'),
+             'rviz', 'view_robot.rviz']
+        ),
+        description='Path to the RViz configuration file'
+    ),)
     declared_arguments.append(
         DeclareLaunchArgument(
             "gazebo_gui", default_value="true", description="Start gazebo with GUI?"
