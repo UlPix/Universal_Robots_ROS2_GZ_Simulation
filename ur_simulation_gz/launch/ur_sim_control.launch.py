@@ -206,6 +206,8 @@ def launch_setup(context, *args, **kwargs):
             "/depth_camera@sensor_msgs/msg/Image@gz.msgs.Image",
             "/rgb_camera@sensor_msgs/msg/Image@gz.msgs.Image",
             "depth_camera/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked",
+            # '--ros-args',
+            # '-p', 'publish_optical_frame:=true',
         ],
         output="screen",
     )
