@@ -27,7 +27,6 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 # Author: Denis Stogl
-
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
@@ -179,7 +178,7 @@ def launch_setup(context, *args, **kwargs):
             "-P",
             "0",
             "-Y",
-            "0",
+            "3.14",
         ],
     )
     gz_launch_description_with_gui = IncludeLaunchDescription(
