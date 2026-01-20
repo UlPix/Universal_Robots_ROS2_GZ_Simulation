@@ -28,21 +28,13 @@
 #
 # Author: Denis Stogl
 from launch import LaunchDescription
-from launch.actions import (
-    DeclareLaunchArgument,
-    IncludeLaunchDescription,
-    OpaqueFunction,
-    RegisterEventHandler,
-)
+from launch.actions import (DeclareLaunchArgument, IncludeLaunchDescription,
+                            OpaqueFunction, RegisterEventHandler)
 from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import (
-    Command,
-    FindExecutable,
-    LaunchConfiguration,
-    PathJoinSubstitution,
-)
+from launch.substitutions import (Command, FindExecutable, LaunchConfiguration,
+                                  PathJoinSubstitution)
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
@@ -61,6 +53,7 @@ def launch_setup(context, *args, **kwargs):
     prefix = LaunchConfiguration("prefix")
     start_joint_controller = LaunchConfiguration("start_joint_controller")
     initial_joint_controller = LaunchConfiguration("initial_joint_controller")
+    initial_joint_position = LaunchConfiguration("initial_joint_position")
     launch_rviz = LaunchConfiguration("launch_rviz")
     rviz_config_file = LaunchConfiguration("rviz_config_file")
     gazebo_gui = LaunchConfiguration("gazebo_gui")
@@ -68,6 +61,9 @@ def launch_setup(context, *args, **kwargs):
 
     initial_joint_controllers = PathJoinSubstitution(
         [FindPackageShare(runtime_config_package), "config", controllers_file]
+    )
+    initial_joint_position = PathJoinSubstitution(
+        [FindPackageShare(runtime_config_package), "config", initial_joint_position]
     )
 
     # rviz_config_file = PathJoinSubstitution(
@@ -105,6 +101,9 @@ def launch_setup(context, *args, **kwargs):
             " ",
             "simulation_controllers:=",
             initial_joint_controllers,
+            " ",
+            "initial_positions_file:=",
+            initial_joint_position,
         ]
     )
     robot_description = {"robot_description": robot_description_content}
@@ -278,6 +277,13 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            "initial_joint_position",
+            default_value="initial_joint_position.yaml",
+            description="YAML file with the initial joint positions.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             "description_package",
             default_value="ur_description",
             description="Description package with robot URDF/XACRO files. Usually the argument \
@@ -328,7 +334,7 @@ def generate_launch_description():
     ),)
     declared_arguments.append(
         DeclareLaunchArgument(
-            "gazebo_gui", default_value="true", description="Start gazebo with GUI?"
+            "gazebo_gui", default_value="false", description="Start gazebo with GUI?"
         )
     )
     declared_arguments.append(

@@ -29,7 +29,8 @@
 # Author: Denis Stogl
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, OpaqueFunction
+from launch.actions import (DeclareLaunchArgument, IncludeLaunchDescription,
+                            OpaqueFunction)
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare
@@ -85,7 +86,6 @@ def launch_setup(context, *args, **kwargs):
         ur_control_launch,
         ur_moveit_launch,
     ]
-
     return nodes_to_launch
 
 
