@@ -177,7 +177,7 @@ def launch_setup(context, *args, **kwargs):
             "-P",
             "0",
             "-Y",
-            "3.14",
+            "0",
         ],
     )
     gz_launch_description_with_gui = IncludeLaunchDescription(
